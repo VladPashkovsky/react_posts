@@ -1,0 +1,84 @@
+1. useRef - напрямую получить из DOM дерева
+Неуправляемы или неконтролируемый компонент
+
+const bodyInputRef = useRef()
+
+<input ref={bodyInputRef} type='text' />
+
+console.log(bodyInputRef.current.value)
+
+================================================================================
+
+2. Обратная передача из компонента к родителю. Функия обратного вызова.
+
+Компонент PostForm:
+const PostForm = ({ create }) => {
+
+  const [post, setPost] = useState({ title: '', body: '' })
+
+  const addNewPost = (e) => {
+    e.preventDefault()
+    const newPost = { ...post, id: Date.now() }
+    create(newPost)
+    setPost({ title: '', body: '' })
+  }
+
+Родитель:
+function App() {
+  const [posts, setPosts] = useState([
+    { id: 1, title: 'JavaScript', body: 'First' },
+    { id: 2, title: 'NodeJS', body: 'Second' },
+    { id: 3, title: 'Python', body: 'Third' },
+    { id: 4, title: 'Spanish', body: 'Fourth' },
+  ])
+
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost])
+  }
+
+  return (
+    <div className='App'>
+      <PostForm create={createPost} />
+      <PostList posts={posts} title='Post List:' />
+    </div>
+  )
+}
+
+export default App
+
+===========================================================================
+
+3. Сортировка постов. т.к. sort мутирует, мы разворачиваем массив и сортируем их. Сравниваем используя localeCompare - сравнение строк.
+[...posts].sort((a, b) => a[selectedSort].localeCompare(b[selectedSort]))
+
+============================================================================
+
+4. useMemo(() => {}, []) в коллбэе передается вычисления, результат этих вычислений запоминаются и пересчет происходит заного
+только при изменении в массиве зависимостей
+
+=============================================================================
+
+5. Первоначальный useState с постами
+ const [posts, setPosts] = useState([
+    { id: 1, title: 'JavaScript', body: 'First' },
+    { id: 2, title: 'NodeJS', body: 'Second' },
+    { id: 3, title: 'Python', body: 'Third' },
+    { id: 4, title: 'Spanish', body: 'Fourth' },
+  ])
+
+============================================================================
+
+6. Жизненный цикл компонента
+Mount => Update => Unmount
+
+7. Идея по итерации publicRoutes и privateRoutes
+
+    const isAuth = true
+
+    isAuth
+
+   ? {privateRoutes.map(route =>
+      <Route path={route.path} element={route.element} exact={route.exact} />
+
+   : {publicRoutes.map(route =>
+      <Route path={route.path} element={route.element} exact={route.exact} />
