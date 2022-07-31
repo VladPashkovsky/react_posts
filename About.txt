@@ -82,3 +82,6 @@ Mount => Update => Unmount
 
    : {publicRoutes.map(route =>
       <Route path={route.path} element={route.element} exact={route.exact} />
+
+==============================================================================
+8. Бесконечный скролинг - Intersection Observer API
